@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package calculator;
+option go_package = "calculator/calcpb";
+
+message CalcRequest {
+  int32 num1 = 1;
+  int32 num2 = 2;
+}
+
+message CalcResponse { int32 answer = 1; }
+
+message PrimeDecompRequest { int32 integer = 1; }
+
+message PrimeDecompResponse { int64 prime = 1; }
+
+message AverageRequest { int64 number = 1; }
+
+message AverageResponse { float average = 1; }
+
+message SquareRootRequest { int32 number = 1; }
+
+message SquareRootResponse { double number_root = 1; }
+
+service CalcService {
+  // Unary
+  rpc Sum(CalcRequest) returns (CalcResponse) {};
+
+  // Server streaming
+  rpc PrimeDecomposition(PrimeDecompRequest)
+      returns (stream PrimeDecompResponse) {};
+
+  rpc ComputeAverage(stream AverageRequest) returns (AverageResponse) {};
+
+  // this RPC will throw an exception if the sent number is negative
+  // it will be INVALID_ARGUMENT
+  rpc SquareRoot(SquareRootRequest) returns (SquareRootResponse) {};
+}
